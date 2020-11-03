@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Converter SVG para imagem</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        #s {
+            width: 200px;
+            height: 200px;
+            border: 1px solid red;
+        }
+
+        img {
+            max-width: 400px;
+            max-height: 400px;
+        }
+
+        textarea {
+            width: 100%;
+            outline: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <div>
+            <h1>Converter Texto de SVG para Imagem</h1>
+        </div>
+        <textarea name="" id="svg" cols="30" rows="10" autofocus></textarea>
+        <button id="converter">Converter</button>
+        <img src="" id="imagem" alt="">
+    </main>
+
+    <script>
+
+        document.getElementById('converter').onclick = function () {
+
+            const svg = document.getElementById('svg').value;
+            let [inicio, fim] = svg.split('<svg ');
+            inicio = '<svg xmlns="http://www.w3.org/2000/svg" '
+
+            const blob = new Blob([inicio + fim], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(blob);
+            const image = document.getElementById('imagem');
+            image.src = url;
+            var tag = document.createElement('a');
+            tag.href = url;
+
+            let fileName = prompt("Digite o nome do arquivo");
+            if (!fileName) {
+                fileName = `image_${new Date().getTime()}.svg`
+            }
+            while (fileName && fileName.trim().length < 3) {
+                fileName = prompt("Digite o nome do arquivo");
+            }
+
+            tag.download = fileName;
+            document.body.appendChild(tag);
+            tag.click();
+            document.body.removeChild(tag);
+        }
+
+    </script>
+</body>
+
+</html>
